@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class ListaItem {\n  constructor(desc) {\n    this.desc = desc;\n    this.completado = false;\n  }\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

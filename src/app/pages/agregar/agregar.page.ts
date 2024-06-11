@@ -1,68 +1,60 @@
-import { Component, OnInit } from '@angular/core';
-import { DeseosService } from '../../services/deseos.service';
-import { ActivatedRoute } from '@angular/router';
-import { Lista } from '../../models/lista.model';
-import { ListaItem } from '../../models/lista-item.model';
+import { Component, OnInit } from "@angular/core";
+import { DeseosService } from "../../services/deseos.service";
+import { ActivatedRoute } from "@angular/router";
+import { Lista } from "../../models/lista.model";
+import { ListaItem } from "../../models/lista-item.model";
 
 @Component({
-  selector: 'app-agregar',
-  templateUrl: './agregar.page.html',
-  styleUrls: ['./agregar.page.scss'],
+  selector: "app-agregar",
+  templateUrl: "./agregar.page.html",
+  styleUrls: ["./agregar.page.scss"],
 })
 export class AgregarPage implements OnInit {
+  lista!: Lista;
+  nombreItem = "";
 
-  lista: Lista;
-  nombreItem = '';
-
-  constructor( private deseosService: DeseosService,
-               private route: ActivatedRoute ) {
-
-    const listaId = this.route.snapshot.paramMap.get('listaId');
-    this.lista = this.deseosService.obtenerLista( listaId );
-
+  constructor(
+    private deseosService: DeseosService,
+    private route: ActivatedRoute
+  ) {
+    const listaId = this.route.snapshot.paramMap.get("listaId");
+    this.lista = this.deseosService.obtenerLista(listaId ?? "")!;
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   agregarItem() {
-
-    if ( this.nombreItem.length === 0 ) {
+    if (this.nombreItem.length === 0) {
       return;
     }
 
-    const nuevoItem = new ListaItem( this.nombreItem );
-    this.lista.items.push( nuevoItem );
+    const nuevoItem = new ListaItem(this.nombreItem);
+    this.lista.items.push(nuevoItem);
 
-    this.nombreItem = '';
+    this.nombreItem = "";
     this.deseosService.guardarStorage();
   }
 
-  cambioCheck( item: ListaItem ) {
+  cambioCheck(item: ListaItem) {
+    const pendientes = this.lista.items.filter(
+      (itemData) => !itemData.completado
+    ).length;
 
-    const pendientes = this.lista.items
-                            .filter( itemData => !itemData.completado )
-                            .length;
-
-    if ( pendientes === 0 ) {
+    if (pendientes === 0) {
       this.lista.terminadaEn = new Date();
       this.lista.terminada = true;
     } else {
-      this.lista.terminadaEn = null;
+      this.lista.terminadaEn = null as any;
       this.lista.terminada = false;
     }
 
     this.deseosService.guardarStorage();
 
     console.log(this.deseosService.listas);
-
   }
 
-  borrar( i: number ) {
-
-    this.lista.items.splice( i, 1 );
+  borrar(i: number) {
+    this.lista.items.splice(i, 1);
     this.deseosService.guardarStorage();
-
   }
-
 }

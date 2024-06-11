@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class Lista {\n  constructor(titulo) {\n    this.titulo = titulo;\n    this.creadaEn = new Date();\n    this.terminada = false;\n    this.items = [];\n    this.id = new Date().getTime();\n  }\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
